@@ -84,18 +84,4 @@ It takes preprocessed health data (from Python/pandas) and turns it into **clear
       - LLM‑style insight sentences.
       - Lifestyle recommendations derived from those insights.
 
----
-
-### How Your Part Fits the Overall Project
-
-Your Person‑2 role is responsible for **everything inside this folder**:
-- Turning numeric health metrics into **clear explanations, warnings, and lifestyle insights**.
-- Performing **contextual reasoning** over the last 7 days.
-- Using **anomaly detection** to flag unusual behavior.
-- Providing **LLM/RAG‑style, human‑friendly text** that the frontend can show to non‑experts.
-
-Other roles (data ingestion, UI/visualization, real LLM API, real document store) can plug into this layer via:
-- The **Flask API** (`/analyze`).
-- Or directly by importing and calling `AIReasoningEngine` / `EnhancedAIReasoningEngine`.
-
 
