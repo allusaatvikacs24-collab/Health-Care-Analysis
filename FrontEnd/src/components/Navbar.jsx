@@ -1,5 +1,6 @@
-import { Bell, User, Sun, Moon } from 'lucide-react';
+import { Bell, Sun, Moon } from 'lucide-react';
 import SearchBar from './SearchBar';
+import UserDropdown from './UserDropdown';
 import { useTheme } from '../context/ThemeContext';
 
 export default function Navbar({ onSearch }) {
@@ -33,10 +34,7 @@ export default function Navbar({ onSearch }) {
             <span className="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
           </button>
           
-          <button className="flex items-center space-x-2 dark:bg-blue-900/50 bg-slate-200/70 rounded-lg px-3 py-2 dark:hover:bg-blue-800/50 hover:bg-slate-300/70 transition-colors">
-            <User className="w-4 h-4 dark:text-gray-400 text-slate-900" />
-            <span className="text-sm dark:text-gray-300 text-slate-900">Admin</span>
-          </button>
+          <UserDropdown />
         </div>
       </div>
     </nav>
