@@ -111,10 +111,30 @@ def detect_anomalies(series: pd.Series, window=7, k=3):
     
     return results
 
+def convert_wide_to_long(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Convert wide format CSV to long format expected by processor
+    """
+    records = []
+    for _, row in df.iterrows():
+        date = row['date']
+        records.extend([
+            {'user_id': 'user1', 'date': date, 'metric': 'heart_rate', 'value': row['heart_rate_bpm']},
+            {'user_id': 'user1', 'date': date, 'metric': 'steps', 'value': row['steps']},
+            {'user_id': 'user1', 'date': date, 'metric': 'sleep', 'value': row['sleep_hours']},
+            {'user_id': 'user1', 'date': date, 'metric': 'water', 'value': row['water_liters']},
+            {'user_id': 'user1', 'date': date, 'metric': 'calories', 'value': row['calories_burned']}
+        ])
+    return pd.DataFrame(records)
+
 def get_trends_and_insights(df: pd.DataFrame):
     """
     Main processing function to generate summary, trends, and anomalies.
     """
+    # Handle wide format CSV
+    if 'heart_rate_bpm' in df.columns:
+        df = convert_wide_to_long(df)
+    
     validate_schema(df)
     df = normalize(df)
     
