@@ -80,12 +80,12 @@ export default function Dashboard() {
           <button 
             onClick={handleRefresh}
             disabled={refreshing}
-            className="flex items-center space-x-2 bg-neon-blue/20 border border-neon-blue/30 text-neon-blue px-4 py-2 rounded-lg hover:bg-neon-blue/30 transition-colors disabled:opacity-50"
+            className="flex items-center space-x-2 dark:bg-blue-600/20 bg-blue-100 dark:border-blue-500/30 border-blue-300 dark:text-blue-400 text-blue-700 px-4 py-2 rounded-lg dark:hover:bg-blue-600/30 hover:bg-blue-200 transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             <span>{refreshing ? 'Refreshing...' : 'Refresh Data'}</span>
           </button>
-          <div className="text-sm dark:text-gray-400 text-slate-900">
+          <div className="text-sm dark:text-gray-400 text-slate-600">
             Last updated: {new Date().toLocaleString()}
           </div>
         </div>
