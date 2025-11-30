@@ -84,51 +84,51 @@ export default function Trends() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <LineChartCard
-          title="Patient Growth Trend"
+          title="Daily Steps Trend"
           data={trendData}
-          dataKey="patients"
+          dataKey="value"
           color="#00D4FF"
         />
         <LineChartCard
-          title="Revenue Growth"
+          title="Heart Rate Trend"
           data={trendData}
-          dataKey="revenue"
-          color="#8B5CF6"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <BarChartCard
-          title="Age Group Distribution"
-          data={ageData}
-          dataKey="count"
-          color="#00FF88"
-        />
-        <LineChartCard
-          title="Patient Satisfaction Trend"
-          data={trendData}
-          dataKey="satisfaction"
+          dataKey="value"
           color="#FF6B6B"
         />
       </div>
 
-      <div className="dark:bg-slate-800/50 bg-white border dark:border-slate-700 border-slate-300 rounded-xl p-6 shadow-lg">
-        <h3 className="text-xl font-semibold dark:text-white text-slate-900 mb-4">Key Insights</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <LineChartCard
+          title="Sleep Quality Trend"
+          data={trendData}
+          dataKey="value"
+          color="#8B5CF6"
+        />
+        <LineChartCard
+          title="Water Intake Trend"
+          data={trendData}
+          dataKey="value"
+          color="#00FF88"
+        />
+      </div>
+
+      <div className="card-gradient border border-gray-700 rounded-xl p-6">
+        <h3 className="text-xl font-semibold dark:text-white text-slate-900 mb-4">Health Insights</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="dark:bg-green-500/10 bg-green-50 border dark:border-green-500/30 border-green-300 rounded-lg p-4">
-            <h4 className="dark:text-green-400 text-green-700 font-semibold">Growth Rate</h4>
+          <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+            <h4 className="text-green-400 font-semibold">Activity Level</h4>
             <p className="text-2xl font-bold dark:text-white text-slate-900">+{liveMetrics.growth.toFixed(1)}%</p>
-            <p className="text-sm dark:text-gray-400 text-slate-600">Patient increase this {timeRange === '6months' ? 'quarter' : 'period'}</p>
+            <p className="text-sm text-gray-400">Steps increase this {timeRange === '6months' ? 'quarter' : 'period'}</p>
           </div>
-          <div className="dark:bg-blue-500/10 bg-blue-50 border dark:border-blue-500/30 border-blue-300 rounded-lg p-4">
-            <h4 className="dark:text-blue-400 text-blue-700 font-semibold">Revenue Impact</h4>
-            <p className="text-2xl font-bold dark:text-white text-slate-900">${liveMetrics.revenue}K</p>
-            <p className="text-sm dark:text-gray-400 text-slate-600">Average monthly revenue</p>
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+            <h4 className="text-neon-blue font-semibold">Heart Health</h4>
+            <p className="text-2xl font-bold dark:text-white text-slate-900">{liveMetrics.revenue} bpm</p>
+            <p className="text-sm text-gray-400">Average resting heart rate</p>
           </div>
-          <div className="dark:bg-purple-500/10 bg-purple-50 border dark:border-purple-500/30 border-purple-300 rounded-lg p-4">
-            <h4 className="dark:text-purple-400 text-purple-700 font-semibold">Satisfaction</h4>
-            <p className="text-2xl font-bold dark:text-white text-slate-900">{liveMetrics.satisfaction.toFixed(1)}/5</p>
-            <p className="text-sm dark:text-gray-400 text-slate-600">Average satisfaction score</p>
+          <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4">
+            <h4 className="text-neon-purple font-semibold">Sleep Quality</h4>
+            <p className="text-2xl font-bold dark:text-white text-slate-900">{liveMetrics.satisfaction.toFixed(1)}h</p>
+            <p className="text-sm text-gray-400">Average sleep duration</p>
           </div>
         </div>
       </div>
