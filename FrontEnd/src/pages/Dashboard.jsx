@@ -4,6 +4,7 @@ import MetricCard from '../components/MetricCard';
 import LineChartCard from '../components/LineChartCard';
 import PieChartCard from '../components/PieChartCard';
 import DataTable from '../components/DataTable';
+import AIInsightCard from '../components/AIInsightCard';
 import Loader from '../components/Loader';
 import { api } from '../services/api';
 
@@ -192,6 +193,11 @@ export default function Dashboard() {
           color="#FF6B6B"
         />
       </div>
+
+      <AIInsightCard 
+        healthData={metrics || { totalPatients: 12847, avgSteps: 8420, avgHeartRate: 72, avgSleep: 7.2 }}
+        title="AI Health Dashboard Analysis"
+      />
 
       <DataTable
         title="Health Metrics Summary"

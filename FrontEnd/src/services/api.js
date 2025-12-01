@@ -110,6 +110,15 @@ export const api = {
       // Save to localStorage for persistence
       localStorage.setItem('healthData', JSON.stringify(currentData));
       
+      // Generate AI insights using Gemini
+      let aiInsight = '';
+      try {
+        aiInsight = await geminiService.generateHealthInsights(parsedData.metrics);
+      } catch (error) {
+        console.error('AI insight generation failed:', error);
+        aiInsight = 'AI analysis temporarily unavailable. Your data has been processed successfully.';
+      }
+      
       const insights = [
         {
           id: Date.now(),
@@ -120,15 +129,22 @@ export const api = {
         },
         {
           id: Date.now() + 1,
+          type: 'info',
+          title: 'AI Health Analysis',
+          description: aiInsight,
+          timestamp: 'Just now'
+        },
+        {
+          id: Date.now() + 2,
           type: parsedData.metrics.criticalCases > 0 ? 'warning' : 'success',
-          title: 'Health Analysis Complete',
+          title: 'Health Assessment Complete',
           description: parsedData.metrics.criticalCases > 0 ? 
             `Found ${parsedData.metrics.criticalCases} cases requiring attention` :
             'All health metrics within normal ranges',
           timestamp: 'Just now'
         }
       ];
-      currentData.insights = [...insights, ...currentData.insights.slice(0, 2)];
+      currentData.insights = [...insights, ...currentData.insights.slice(0, 1)];
       
       // Trigger live updates
       window.dispatchEvent(new CustomEvent('dataUpdated', { detail: currentData }));

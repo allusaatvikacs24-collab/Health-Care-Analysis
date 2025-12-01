@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Upload as UploadIcon, FileText, CheckCircle, XCircle, BarChart3 } from 'lucide-react';
 import { api } from '../services/api';
 import PieChartCard from '../components/PieChartCard';
+import AIInsightCard from '../components/AIInsightCard';
 
 export default function Upload() {
   const [dragActive, setDragActive] = useState(false);
@@ -220,6 +221,11 @@ export default function Upload() {
               <p className="text-sm text-gray-400">need attention</p>
             </div>
           </div>
+
+          <AIInsightCard 
+            healthData={uploadedData.metrics}
+            title="AI Analysis of Your Health Data"
+          />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <PieChartCard
