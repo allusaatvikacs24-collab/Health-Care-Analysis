@@ -93,10 +93,12 @@ export const api = {
   },
 
   async uploadFile(file) {
-    await delay(2000);
+    await delay(1000);
     try {
       const text = await file.text();
       const parsedData = parseCSVData(text);
+      
+      console.log('Parsed CSV data:', parsedData);
       
       // Update all data with parsed CSV data
       currentData.metrics = parsedData.metrics;
@@ -112,17 +114,17 @@ export const api = {
         {
           id: Date.now(),
           type: 'success',
-          title: 'Health Data Processed',
-          description: `Analyzed ${parsedData.metrics.totalPatients} health records with avg ${parsedData.metrics.avgSteps} steps/day`,
+          title: 'CSV Data Uploaded Successfully',
+          description: `Processed ${parsedData.metrics.totalPatients} health records. Average steps: ${parsedData.metrics.avgSteps}/day`,
           timestamp: 'Just now'
         },
         {
           id: Date.now() + 1,
           type: parsedData.metrics.criticalCases > 0 ? 'warning' : 'success',
-          title: 'Health Assessment',
+          title: 'Health Analysis Complete',
           description: parsedData.metrics.criticalCases > 0 ? 
-            `${parsedData.metrics.criticalCases} individuals need health attention` :
-            'All individuals show healthy vital signs',
+            `Found ${parsedData.metrics.criticalCases} cases requiring attention` :
+            'All health metrics within normal ranges',
           timestamp: 'Just now'
         }
       ];
@@ -133,12 +135,13 @@ export const api = {
       
       return { 
         success: true, 
-        message: `Health data processed: ${parsedData.metrics.totalPatients} records analyzed`, 
+        message: `Successfully processed ${parsedData.metrics.totalPatients} health records from ${file.name}`, 
         fileName: file.name,
         data: parsedData
       };
     } catch (error) {
-      throw new Error('File processing failed. Please check your CSV format and try again.');
+      console.error('CSV processing error:', error);
+      throw new Error(`Failed to process CSV file: ${error.message}. Please ensure your CSV has the correct format with headers: steps, heart_rate, sleep_hours, hydration_liters`);
     }
   },
 
