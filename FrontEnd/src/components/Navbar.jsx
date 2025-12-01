@@ -1,10 +1,19 @@
-import { Bell, Sun, Moon } from 'lucide-react';
+import { useState } from 'react';
+import { Bell, Sun, Moon, Key } from 'lucide-react';
 import SearchBar from './SearchBar';
 import UserDropdown from './UserDropdown';
+import ApiKeyModal from './ApiKeyModal';
 import { useTheme } from '../context/ThemeContext';
+import { apiKeyService } from '../services/apiKeyService';
 
 export default function Navbar({ onSearch }) {
   const { isDark, toggleTheme } = useTheme();
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+  const [hasApiKey, setHasApiKey] = useState(apiKeyService.hasApiKey());
+
+  const handleApiKeySave = (apiKey) => {
+    setHasApiKey(true);
+  };
   return (
     <nav className="dark:bg-blue-950/70 bg-white/95 backdrop-blur-sm border-b dark:border-blue-900 border-slate-300 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -23,6 +32,18 @@ export default function Navbar({ onSearch }) {
           </div>
           
           <button 
+            onClick={() => setShowApiKeyModal(true)}
+            className={`p-2 transition-colors ${
+              hasApiKey 
+                ? 'dark:text-green-400 text-green-600 hover:text-green-500' 
+                : 'dark:text-gray-400 text-slate-900 hover:text-blue-600'
+            }`}
+            title={hasApiKey ? 'API Key Configured' : 'Configure API Key'}
+          >
+            <Key className="w-5 h-5" />
+          </button>
+          
+          <button 
             onClick={toggleTheme}
             className="p-2 dark:text-gray-400 text-slate-900 hover:text-blue-600 transition-colors"
           >
@@ -37,6 +58,12 @@ export default function Navbar({ onSearch }) {
           <UserDropdown />
         </div>
       </div>
+      
+      <ApiKeyModal 
+        isOpen={showApiKeyModal}
+        onClose={() => setShowApiKeyModal(false)}
+        onSave={handleApiKeySave}
+      />
     </nav>
   );
 }

@@ -1,7 +1,17 @@
 import { mockMetrics, mockTrendData, mockDiseaseData, mockAgeGroups, mockInsights, generateRandomData, parseCSVData, mockForecastData, mockRiskData, mockWeeklyData, mockHabits, mockSleepQuality, mockChatResponses } from './mockData.js';
+import { apiKeyService } from './apiKeyService.js';
 
 const API_BASE_URL = 'http://localhost:8000';
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Helper to create authenticated headers
+const getAuthHeaders = () => {
+  const apiKey = apiKeyService.getApiKey();
+  return {
+    'Content-Type': 'application/json',
+    ...(apiKey && { 'Authorization': `Bearer ${apiKey}` })
+  };
+};
 
 let currentData = {
   metrics: mockMetrics,
@@ -206,8 +216,15 @@ export const api = {
       const formData = new FormData();
       formData.append('file', file);
       
+      const apiKey = apiKeyService.getApiKey();
+      const headers = {};
+      if (apiKey) {
+        headers['Authorization'] = `Bearer ${apiKey}`;
+      }
+      
       const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
+        headers,
         body: formData
       });
       
@@ -287,7 +304,9 @@ export const api = {
   },
 
   async getDataById(dataId) {
-    const response = await fetch(`${API_BASE_URL}/data/${dataId}/summary`);
+    const response = await fetch(`${API_BASE_URL}/data/${dataId}/summary`, {
+      headers: getAuthHeaders()
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch data: ${response.statusText}`);
     }
