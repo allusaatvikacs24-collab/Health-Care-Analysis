@@ -19,10 +19,10 @@ export default function BarChartCard({ title, data, dataKey, color = '#8B5CF6' }
             />
             <Tooltip 
               contentStyle={{
-                backgroundColor: '#1F2937',
-                border: '1px solid #374151',
+                backgroundColor: 'var(--tooltip-bg, #1F2937)',
+                border: '1px solid var(--tooltip-border, #374151)',
                 borderRadius: '8px',
-                color: '#fff'
+                color: 'var(--tooltip-text, #fff)'
               }}
             />
             <Bar 

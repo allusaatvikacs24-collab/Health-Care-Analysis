@@ -30,10 +30,10 @@ export default function LineChartCard({ title, data, dataKey, color = '#00D4FF' 
             />
             <Tooltip 
               contentStyle={{
-                backgroundColor: '#1F2937',
-                border: '1px solid #374151',
+                backgroundColor: 'var(--tooltip-bg, #1F2937)',
+                border: '1px solid var(--tooltip-border, #374151)',
                 borderRadius: '8px',
-                color: '#fff'
+                color: 'var(--tooltip-text, #fff)'
               }}
             />
             <Line 

@@ -13,7 +13,7 @@ export default function PieChartCard({ title, data }) {
   }
 
   return (
-    <div className="card-gradient border border-gray-700 rounded-xl p-6 neon-glow-green">
+    <div className="dark:bg-slate-800/50 bg-white border dark:border-slate-700 border-slate-300 rounded-xl p-6 shadow-lg">
       <h3 className="text-xl font-semibold dark:text-white text-slate-900 mb-6">{title}</h3>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
@@ -34,14 +34,14 @@ export default function PieChartCard({ title, data }) {
             </Pie>
             <Tooltip 
               contentStyle={{
-                backgroundColor: '#1F2937',
-                border: '1px solid #374151',
+                backgroundColor: 'var(--tooltip-bg, #1F2937)',
+                border: '1px solid var(--tooltip-border, #374151)',
                 borderRadius: '8px',
-                color: '#fff'
+                color: 'var(--tooltip-text, #fff)'
               }}
             />
             <Legend 
-              wrapperStyle={{ color: '#fff' }}
+              wrapperStyle={{ color: 'var(--legend-text, #374151)' }}
             />
           </PieChart>
         </ResponsiveContainer>

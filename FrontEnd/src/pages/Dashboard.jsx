@@ -3,6 +3,7 @@ import { Users, UserCheck, Heart, Activity, RefreshCw, Droplets, Moon } from 'lu
 import MetricCard from '../components/MetricCard';
 import LineChartCard from '../components/LineChartCard';
 import PieChartCard from '../components/PieChartCard';
+import DataTable from '../components/DataTable';
 import Loader from '../components/Loader';
 import { api } from '../services/api';
 
@@ -170,6 +171,22 @@ export default function Dashboard() {
           color="#FF6B6B"
         />
       </div>
+
+      <DataTable
+        title="Health Metrics Summary"
+        data={[
+          { metric: 'Average Steps', value: metrics?.avgSteps?.toLocaleString() || '0', status: 'Good', trend: '+5%' },
+          { metric: 'Heart Rate', value: `${metrics?.avgHeartRate || 0} bpm`, status: 'Normal', trend: '-2%' },
+          { metric: 'Sleep Hours', value: `${metrics?.avgSleep || 0}h`, status: 'Fair', trend: '+8%' },
+          { metric: 'Active Users', value: metrics?.totalPatients?.toLocaleString() || '0', status: 'Growing', trend: '+12%' }
+        ]}
+        columns={[
+          { header: 'Health Metric', accessor: 'metric' },
+          { header: 'Current Value', accessor: 'value' },
+          { header: 'Status', accessor: 'status' },
+          { header: 'Trend', accessor: 'trend' }
+        ]}
+      />
     </div>
   );
 }
