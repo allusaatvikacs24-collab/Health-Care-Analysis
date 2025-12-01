@@ -65,14 +65,14 @@ export default function Upload() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="card-gradient border border-gray-700 rounded-xl p-6">
+        <div className="dark:bg-slate-800/50 bg-white border dark:border-slate-700 border-slate-300 rounded-xl p-6 shadow-lg">
           <h2 className="text-xl font-semibold dark:text-white text-slate-900 mb-6">Upload CSV File</h2>
           
           <div
             className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
               dragActive 
-                ? 'border-neon-blue bg-neon-blue/10 neon-glow' 
-                : 'border-gray-600 hover:border-gray-500'
+                ? 'dark:border-blue-400 border-blue-500 dark:bg-blue-500/10 bg-blue-50' 
+                : 'dark:border-slate-600 border-slate-400 dark:hover:border-slate-500 hover:border-slate-500'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -89,9 +89,9 @@ export default function Upload() {
             
             <div className="space-y-4">
               <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center ${
-                uploading ? 'bg-neon-blue/20 animate-pulse' : 'bg-gray-700'
+                uploading ? 'dark:bg-blue-500/20 bg-blue-100 animate-pulse' : 'dark:bg-slate-700 bg-slate-200'
               }`}>
-                <UploadIcon className={`w-8 h-8 ${uploading ? 'text-neon-blue animate-bounce' : 'text-gray-400'}`} />
+                <UploadIcon className={`w-8 h-8 ${uploading ? 'dark:text-blue-400 text-blue-600 animate-bounce' : 'dark:text-gray-400 text-slate-600'}`} />
               </div>
               
               <div>
@@ -105,7 +105,7 @@ export default function Upload() {
               
               <button
                 disabled={uploading}
-                className="bg-gradient-to-r from-neon-blue to-neon-purple text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg hover:shadow-neon-blue/25 transition-all duration-300 disabled:opacity-50"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 disabled:opacity-50"
               >
                 {uploading ? 'Processing...' : 'Select File'}
               </button>
@@ -139,42 +139,42 @@ export default function Upload() {
           )}
         </div>
 
-        <div className="card-gradient border border-gray-700 rounded-xl p-6">
+        <div className="dark:bg-slate-800/50 bg-white border dark:border-slate-700 border-slate-300 rounded-xl p-6 shadow-lg">
           <h2 className="text-xl font-semibold dark:text-white text-slate-900 mb-6">File Requirements</h2>
           
           <div className="space-y-4">
             <div className="flex items-start space-x-3">
-              <FileText className="w-5 h-5 text-neon-blue mt-0.5" />
+              <FileText className="w-5 h-5 dark:text-blue-400 text-blue-600 mt-0.5" />
               <div>
                 <h3 className="font-medium dark:text-white text-slate-900">CSV Format</h3>
-                <p className="text-sm text-gray-400">Files must be in CSV format with proper headers</p>
+                <p className="text-sm dark:text-gray-400 text-slate-600">Files must be in CSV format with proper headers</p>
               </div>
             </div>
             
             <div className="flex items-start space-x-3">
-              <CheckCircle className="w-5 h-5 text-neon-green mt-0.5" />
+              <CheckCircle className="w-5 h-5 dark:text-green-400 text-green-600 mt-0.5" />
               <div>
                 <h3 className="font-medium dark:text-white text-slate-900">Required Columns</h3>
-                <p className="text-sm text-gray-400">user_id, date, metric, value</p>
+                <p className="text-sm dark:text-gray-400 text-slate-600">steps, heart_rate, sleep_hours, hydration_liters, calories_burned</p>
               </div>
             </div>
             
             <div className="flex items-start space-x-3">
-              <UploadIcon className="w-5 h-5 text-neon-purple mt-0.5" />
+              <UploadIcon className="w-5 h-5 dark:text-purple-400 text-purple-600 mt-0.5" />
               <div>
                 <h3 className="font-medium dark:text-white text-slate-900">File Size</h3>
-                <p className="text-sm text-gray-400">Maximum file size: 10MB</p>
+                <p className="text-sm dark:text-gray-400 text-slate-600">Maximum file size: 10MB</p>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <h4 className="text-neon-blue font-medium mb-2">Sample Data Format</h4>
-            <pre className="text-xs text-gray-300 overflow-x-auto">
-{`user_id,date,metric,value,type,notes
-u001,2024-01-15,steps,8500,walking,Morning jog
-u001,2024-01-15,heart_rate,72,resting,After breakfast
-u001,2024-01-15,sleep,7.5,,Good night sleep`}
+          <div className="mt-6 p-4 dark:bg-blue-500/10 bg-blue-50 border dark:border-blue-500/30 border-blue-300 rounded-lg">
+            <h4 className="dark:text-blue-400 text-blue-700 font-medium mb-2">Sample Data Format</h4>
+            <pre className="text-xs dark:text-gray-300 text-slate-700 overflow-x-auto">
+{`steps,heart_rate,sleep_hours,hydration_liters,calories_burned
+8500,72,7.5,2.2,2100
+9200,75,6.8,1.9,2300
+7800,70,8.1,2.5,1950`}
             </pre>
           </div>
         </div>
