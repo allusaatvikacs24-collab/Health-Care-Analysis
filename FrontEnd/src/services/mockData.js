@@ -162,6 +162,25 @@ export const parseCSVData = (csvText) => {
   const avgHydration = data.reduce((sum, row) => sum + (parseFloat(row.hydration_liters) || 0), 0) / totalPatients;
   const avgCalories = data.reduce((sum, row) => sum + (parseInt(row.calories_burned) || 0), 0) / totalPatients;
   
+  // Generate trend data from CSV
+  const trendData = data.slice(0, 6).map((row, index) => ({
+    month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'][index] || `Day ${index + 1}`,
+    patients: parseInt(row.steps) || 0,
+    revenue: (parseInt(row.calories_burned) || 0) * 10,
+    satisfaction: Math.min(5, Math.max(1, (parseFloat(row.sleep_hours) || 7) * 0.7))
+  }));
+  
+  // Generate water and heart rate data
+  const waterData = data.slice(0, 7).map((row, index) => ({
+    date: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index] || `Day ${index + 1}`,
+    value: parseFloat(row.hydration_liters) || 2.0
+  }));
+  
+  const heartRateData = data.slice(0, 7).map((row, index) => ({
+    date: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index] || `Day ${index + 1}`,
+    value: parseInt(row.heart_rate) || 72
+  }));
+  
   // Health categories based on data
   const healthCategories = {};
   data.forEach(row => {
@@ -189,12 +208,15 @@ export const parseCSVData = (csvText) => {
       activePatients: data.filter(row => parseInt(row.steps) > 6000).length,
       avgSteps: Math.round(avgSteps),
       avgHeartRate: Math.round(avgHeartRate),
-      avgSleep: avgSleep.toFixed(1),
-      avgHydration: avgHydration.toFixed(1),
+      avgSleep: parseFloat(avgSleep.toFixed(1)),
+      avgHydration: parseFloat(avgHydration.toFixed(1)),
       avgCalories: Math.round(avgCalories),
       criticalCases: data.filter(row => parseInt(row.heart_rate) > 100 || parseFloat(row.sleep_hours) < 5).length
     },
+    trendData,
     healthData,
+    waterData,
+    heartRateData,
     rawData: data
   };
 };
