@@ -8,47 +8,11 @@ import Loader from '../components/Loader';
 import { api } from '../services/api';
 
 export default function Dashboard() {
-  const [metrics, setMetrics] = useState({
-    totalPatients: 12847,
-    activePatients: 8932,
-    avgAge: 42.5,
-    criticalCases: 23,
-    avgSteps: 8420,
-    avgHeartRate: 72,
-    avgSleep: 7.2
-  });
-  const [trendData, setTrendData] = useState([
-    { month: 'Jan', patients: 1200, revenue: 45000, satisfaction: 4.2 },
-    { month: 'Feb', patients: 1350, revenue: 52000, satisfaction: 4.3 },
-    { month: 'Mar', patients: 1180, revenue: 48000, satisfaction: 4.1 },
-    { month: 'Apr', patients: 1420, revenue: 58000, satisfaction: 4.4 },
-    { month: 'May', patients: 1380, revenue: 55000, satisfaction: 4.3 },
-    { month: 'Jun', patients: 1520, revenue: 62000, satisfaction: 4.5 }
-  ]);
-  const [diseaseData, setDiseaseData] = useState([
-    { name: 'Excellent', value: 35, color: '#00FF88' },
-    { name: 'Good', value: 28, color: '#00D4FF' },
-    { name: 'Fair', value: 22, color: '#8B5CF6' },
-    { name: 'Poor', value: 15, color: '#FF6B6B' }
-  ]);
-  const [waterData, setWaterData] = useState([
-    { date: 'Mon', value: 2.1 },
-    { date: 'Tue', value: 2.3 },
-    { date: 'Wed', value: 1.9 },
-    { date: 'Thu', value: 2.5 },
-    { date: 'Fri', value: 2.2 },
-    { date: 'Sat', value: 2.4 },
-    { date: 'Sun', value: 2.0 }
-  ]);
-  const [heartRateData, setHeartRateData] = useState([
-    { date: 'Mon', value: 72 },
-    { date: 'Tue', value: 74 },
-    { date: 'Wed', value: 71 },
-    { date: 'Thu', value: 75 },
-    { date: 'Fri', value: 73 },
-    { date: 'Sat', value: 70 },
-    { date: 'Sun', value: 72 }
-  ]);
+  const [metrics, setMetrics] = useState(null);
+  const [trendData, setTrendData] = useState(null);
+  const [diseaseData, setDiseaseData] = useState(null);
+  const [waterData, setWaterData] = useState(null);
+  const [heartRateData, setHeartRateData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -62,16 +26,10 @@ export default function Dashboard() {
       
       console.log('Dashboard data loaded:', { metricsRes, trendsRes, diseaseRes });
       
-      // Only update if we have real data from CSV upload
-      if (metricsRes && Object.keys(metricsRes).length > 0) {
-        setMetrics(metricsRes);
-      }
-      if (trendsRes && trendsRes.length > 0) {
-        setTrendData(trendsRes);
-      }
-      if (diseaseRes && diseaseRes.length > 0) {
-        setDiseaseData(diseaseRes);
-      }
+      // Set data from API response
+      setMetrics(metricsRes);
+      setTrendData(trendsRes);
+      setDiseaseData(diseaseRes);
       
       // Try to get water and heart rate data if available
       try {
@@ -80,8 +38,8 @@ export default function Dashboard() {
           api.getHeartRateData?.() || Promise.resolve([])
         ]);
         
-        if (waterRes && waterRes.length > 0) setWaterData(waterRes);
-        if (heartRateRes && heartRateRes.length > 0) setHeartRateData(heartRateRes);
+        setWaterData(waterRes);
+        setHeartRateData(heartRateRes);
       } catch (error) {
         console.log('Water/heart rate data not available:', error);
       }

@@ -32,8 +32,24 @@ let currentData = loadSavedData() || {
   ageGroups: mockAgeGroups,
   insights: mockInsights,
   searchResults: [],
-  waterData: [],
-  heartRateData: [],
+  waterData: [
+    { date: 'Mon', value: 2.1 },
+    { date: 'Tue', value: 2.3 },
+    { date: 'Wed', value: 1.9 },
+    { date: 'Thu', value: 2.5 },
+    { date: 'Fri', value: 2.2 },
+    { date: 'Sat', value: 2.4 },
+    { date: 'Sun', value: 2.0 }
+  ],
+  heartRateData: [
+    { date: 'Mon', value: 72 },
+    { date: 'Tue', value: 74 },
+    { date: 'Wed', value: 71 },
+    { date: 'Thu', value: 75 },
+    { date: 'Fri', value: 73 },
+    { date: 'Sat', value: 70 },
+    { date: 'Sun', value: 72 }
+  ],
   currentDataId: null,
   previousUserCount: 0
 };
