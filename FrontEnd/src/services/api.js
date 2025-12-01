@@ -1,5 +1,6 @@
 import { mockMetrics, mockTrendData, mockDiseaseData, mockAgeGroups, mockInsights, generateRandomData, parseCSVData, mockForecastData, mockRiskData, mockWeeklyData, mockHabits, mockSleepQuality, mockChatResponses } from './mockData.js';
 import { apiKeyService } from './apiKeyService.js';
+import { geminiService } from './geminiService.js';
 
 const API_BASE_URL = 'http://localhost:8000';
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -466,14 +467,26 @@ export const api = {
   },
 
   async chatWithAI(prompt) {
-    await delay(1500);
-    const lowerPrompt = prompt.toLowerCase();
-    
-    if (lowerPrompt.includes('sleep')) return mockChatResponses.sleep;
-    if (lowerPrompt.includes('stress')) return mockChatResponses.stress;
-    if (lowerPrompt.includes('habit')) return mockChatResponses.habits;
-    
-    return mockChatResponses.default;
+    await delay(500);
+    try {
+      const healthContext = {
+        avgSteps: currentData.metrics?.avgSteps || 0,
+        avgHeartRate: currentData.metrics?.avgHeartRate || 0,
+        avgSleep: currentData.metrics?.avgSleep || 0,
+        totalUsers: currentData.metrics?.totalPatients || 0
+      };
+      
+      return await geminiService.chatWithAI(prompt, healthContext);
+    } catch (error) {
+      console.error('AI chat error:', error);
+      const lowerPrompt = prompt.toLowerCase();
+      
+      if (lowerPrompt.includes('sleep')) return mockChatResponses.sleep;
+      if (lowerPrompt.includes('stress')) return mockChatResponses.stress;
+      if (lowerPrompt.includes('habit')) return mockChatResponses.habits;
+      
+      return mockChatResponses.default;
+    }
   },
 
   async getWeeklyData() {

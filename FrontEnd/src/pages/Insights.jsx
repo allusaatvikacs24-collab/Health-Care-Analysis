@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import InsightsList from '../components/InsightsList';
 import Loader from '../components/Loader';
 import { api } from '../services/api';
-import { Filter, RefreshCw } from 'lucide-react';
+import { geminiService } from '../services/geminiService';
+import { Filter, RefreshCw, Sparkles } from 'lucide-react';
 
 export default function Insights() {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [aiInsight, setAiInsight] = useState('');
+  const [loadingAI, setLoadingAI] = useState(false);
 
   useEffect(() => {
     fetchInsights();
@@ -25,10 +28,27 @@ export default function Insights() {
     try {
       const data = await api.getInsights();
       setInsights(data);
+      
+      // Generate AI insights
+      generateAIInsights();
     } catch (error) {
       console.error('Error fetching insights:', error);
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const generateAIInsights = async () => {
+    setLoadingAI(true);
+    try {
+      const metrics = await api.getMetrics();
+      const aiResponse = await geminiService.generateHealthInsights(metrics);
+      setAiInsight(aiResponse);
+    } catch (error) {
+      console.error('Error generating AI insights:', error);
+      setAiInsight('AI insights temporarily unavailable. Please check back later.');
+    } finally {
+      setLoadingAI(false);
     }
   };
   
@@ -132,13 +152,30 @@ export default function Insights() {
         </div>
       </div>
 
-      <div className="card-gradient rounded-xl p-6">
+      <div className="dark:bg-slate-800/50 bg-white border dark:border-slate-700 border-slate-300 rounded-xl p-6 shadow-lg mb-6">
+        <div className="flex items-center space-x-2 mb-4">
+          <Sparkles className="w-5 h-5 dark:text-blue-400 text-blue-600" />
+          <h2 className="text-xl font-semibold dark:text-white text-slate-900">AI Health Analysis</h2>
+        </div>
+        {loadingAI ? (
+          <div className="flex items-center space-x-2 dark:text-gray-400 text-slate-600">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+            <span>Generating AI insights...</span>
+          </div>
+        ) : (
+          <div className="dark:text-gray-300 text-slate-700 leading-relaxed">
+            {aiInsight}
+          </div>
+        )}
+      </div>
+
+      <div className="dark:bg-slate-800/50 bg-white border dark:border-slate-700 border-slate-300 rounded-xl p-6 shadow-lg">
         <h2 className="text-xl font-semibold dark:text-white text-slate-900 mb-6">Recent Insights</h2>
         {filteredInsights.length > 0 ? (
           <InsightsList insights={filteredInsights} />
         ) : (
           <div className="text-center py-8">
-            <p className="dark:text-gray-400 text-slate-900">No insights found for the selected filter.</p>
+            <p className="dark:text-gray-400 text-slate-600">No insights found for the selected filter.</p>
           </div>
         )}
       </div>
