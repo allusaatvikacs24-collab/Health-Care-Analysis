@@ -22,11 +22,16 @@ export default function Dashboard() {
           api.getDiseaseData()
         ]);
         
+        console.log('Dashboard data loaded:', { metricsRes, trendsRes, diseaseRes });
         setMetrics(metricsRes);
         setTrendData(trendsRes);
         setDiseaseData(diseaseRes);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
+        // Set default data on error
+        setMetrics({ totalPatients: 0, activePatients: 0, avgAge: 0, criticalCases: 0 });
+        setTrendData([]);
+        setDiseaseData([]);
       } finally {
         setLoading(false);
       }
@@ -73,28 +78,28 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard
           title="Total Patients"
-          value={metrics.totalPatients}
+          value={metrics?.totalPatients || 0}
           change={8.2}
           icon={Users}
           color="blue"
         />
         <MetricCard
           title="Active Patients"
-          value={metrics.activePatients}
+          value={metrics?.activePatients || 0}
           change={5.4}
           icon={UserCheck}
           color="green"
         />
         <MetricCard
           title="Average Age"
-          value={metrics.avgAge}
+          value={metrics?.avgAge || 0}
           change={-2.1}
           icon={Calendar}
           color="purple"
         />
         <MetricCard
           title="Critical Cases"
-          value={metrics.criticalCases}
+          value={metrics?.criticalCases || 0}
           change={-12.3}
           icon={AlertTriangle}
           color="blue"
@@ -104,26 +109,26 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <LineChartCard
           title="Patient Trends"
-          data={trendData}
+          data={trendData || []}
           dataKey="patients"
           color="#00D4FF"
         />
         <PieChartCard
           title="Disease Distribution"
-          data={diseaseData}
+          data={diseaseData || []}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <LineChartCard
           title="Revenue Trends"
-          data={trendData}
+          data={trendData || []}
           dataKey="revenue"
           color="#8B5CF6"
         />
         <LineChartCard
           title="Satisfaction Score"
-          data={trendData}
+          data={trendData || []}
           dataKey="satisfaction"
           color="#00FF88"
         />

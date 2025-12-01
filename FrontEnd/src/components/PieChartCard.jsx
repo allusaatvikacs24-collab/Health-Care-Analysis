@@ -1,6 +1,17 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 export default function PieChartCard({ title, data }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="dark:bg-slate-800/50 bg-white border dark:border-slate-700 border-slate-300 rounded-xl p-6 shadow-lg">
+        <h3 className="text-xl font-semibold dark:text-white text-slate-900 mb-6">{title}</h3>
+        <div className="h-80 flex items-center justify-center">
+          <p className="dark:text-gray-400 text-slate-600">No data available</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="dark:bg-slate-800/50 bg-white border dark:border-slate-700 border-slate-300 rounded-xl p-6 shadow-lg">
       <h3 className="text-xl font-semibold dark:text-white text-slate-900 mb-6">{title}</h3>
