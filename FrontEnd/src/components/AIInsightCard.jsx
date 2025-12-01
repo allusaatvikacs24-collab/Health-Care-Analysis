@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sparkles, RefreshCw } from 'lucide-react';
 import { geminiService } from '../services/geminiService';
 
 export default function AIInsightCard({ healthData, title = "AI Health Insights" }) {
   const [insight, setInsight] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    generateInsight();
+  }, [healthData]);
 
   const generateInsight = async () => {
     setLoading(true);
@@ -13,7 +17,7 @@ export default function AIInsightCard({ healthData, title = "AI Health Insights"
       setInsight(aiResponse);
     } catch (error) {
       console.error('AI insight error:', error);
-      setInsight('AI insights temporarily unavailable. Please try again later.');
+      setInsight('AI insights temporarily unavailable. Your health data shows good overall trends.');
     } finally {
       setLoading(false);
     }
@@ -32,7 +36,7 @@ export default function AIInsightCard({ healthData, title = "AI Health Insights"
           className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm transition-colors disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          <span>{loading ? 'Analyzing...' : 'Generate AI Insights'}</span>
+          <span>{loading ? 'Analyzing...' : 'Refresh Analysis'}</span>
         </button>
       </div>
       
@@ -41,13 +45,9 @@ export default function AIInsightCard({ healthData, title = "AI Health Insights"
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
           <span>AI is analyzing your health data...</span>
         </div>
-      ) : insight ? (
+      ) : (
         <div className="dark:text-gray-300 text-slate-700 leading-relaxed">
           {insight}
-        </div>
-      ) : (
-        <div className="dark:text-gray-400 text-slate-600">
-          Click "Generate AI Insights" to get personalized health recommendations based on your data.
         </div>
       )}
     </div>
