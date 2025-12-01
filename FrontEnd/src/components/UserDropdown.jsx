@@ -1,20 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { User, X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useTheme } from '../context/ThemeContext';
+import ProfileSetup from './ProfileSetup';
 
 export default function UserDropdown() {
   const [showUserInfo, setShowUserInfo] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [showProfileSetup, setShowProfileSetup] = useState(false);
   const { isDark } = useTheme();
   
-  const userInfo = {
-    name: 'Dr. Sarah Johnson',
-    age: 34,
-    role: 'Health Administrator',
-    email: 'sarah.johnson@healthcenter.com',
-    department: 'Analytics & Insights',
-    lastLogin: new Date().toLocaleDateString()
+  useEffect(() => {
+    const savedProfile = localStorage.getItem('userProfile');
+    if (savedProfile) {
+      setUserInfo(JSON.parse(savedProfile));
+    } else {
+      setShowProfileSetup(true);
+    }
+  }, []);
+  
+  const handleProfileSave = (profile) => {
+    setUserInfo(profile);
+    setShowProfileSetup(false);
   };
+  
+  if (showProfileSetup) {
+    return <ProfileSetup onProfileSave={handleProfileSave} />;
+  }
+  
+  if (!userInfo) {
+    return null;
+  }
 
   const dropdown = showUserInfo ? createPortal(
     <>
@@ -47,8 +63,8 @@ export default function UserDropdown() {
               <p className="dark:text-white text-slate-900 font-medium">{userInfo.age} years</p>
             </div>
             <div>
-              <p className="dark:text-gray-400 text-slate-600">Department</p>
-              <p className="dark:text-white text-slate-900 font-medium">{userInfo.department}</p>
+              <p className="dark:text-gray-400 text-slate-600">Goals</p>
+              <p className="dark:text-white text-slate-900 font-medium">{userInfo.goals || 'Not set'}</p>
             </div>
           </div>
           
@@ -63,7 +79,15 @@ export default function UserDropdown() {
           </div>
           
           <div className="pt-3 border-t dark:border-slate-700 border-slate-200">
-            <button className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+            <button 
+              onClick={() => {
+                // Clear all stored data
+                localStorage.clear();
+                // Reload the page to reset the application
+                window.location.reload();
+              }}
+              className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors"
+            >
               Sign Out
             </button>
           </div>
@@ -80,7 +104,7 @@ export default function UserDropdown() {
         className="flex items-center space-x-2 dark:bg-blue-900/50 bg-slate-200/70 rounded-lg px-3 py-2 dark:hover:bg-blue-800/50 hover:bg-slate-300/70 transition-colors"
       >
         <User className="w-4 h-4 dark:text-gray-400 text-slate-900" />
-        <span className="text-sm dark:text-gray-300 text-slate-900">Admin</span>
+        <span className="text-sm dark:text-gray-300 text-slate-900">{userInfo?.name?.split(' ')[0] || 'User'}</span>
       </button>
       {dropdown}
     </>
