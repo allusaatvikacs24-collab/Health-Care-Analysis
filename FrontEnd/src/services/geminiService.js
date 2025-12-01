@@ -68,7 +68,9 @@ Provide specific, actionable insights about trends, recommendations for improvem
   },
 
   async chatWithAI(message, healthContext = {}) {
-    const prompt = `You are a helpful, encouraging health assistant. 
+    console.log('Gemini chatWithAI called with:', { message, healthContext });
+    
+    const prompt = `You are a helpful, encouraging health assistant with medical knowledge.
 
 User message: "${message}"
 
@@ -78,7 +80,9 @@ User's health context:
 - Average Sleep: ${healthContext.avgSleep || 0} hours
 - Total Users in dataset: ${healthContext.totalUsers || 0}
 
-Provide a helpful, encouraging response with specific actionable health advice based on their data. Keep it conversational and under 150 words. Be supportive and motivating.`;
+Provide a helpful, encouraging response with specific actionable health advice. If they mention symptoms like fever, provide appropriate medical guidance. Keep it conversational and under 150 words. Be supportive and motivating.`;
+    
+    console.log('Sending prompt to Gemini:', prompt);
     
     try {
       const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
@@ -95,14 +99,24 @@ Provide a helpful, encouraging response with specific actionable health advice b
         })
       });
 
+      console.log('Gemini API response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error(`Gemini API error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Gemini API error response:', errorText);
+        throw new Error(`Gemini API error: ${response.status} - ${errorText}`);
       }
 
       const result = await response.json();
-      return result.candidates[0].content.parts[0].text;
+      console.log('Gemini API result:', result);
+      
+      if (result.candidates && result.candidates[0] && result.candidates[0].content) {
+        return result.candidates[0].content.parts[0].text;
+      } else {
+        throw new Error('Invalid response format from Gemini API');
+      }
     } catch (error) {
-      console.error('Gemini chat error:', error);
+      console.error('Gemini chat error details:', error);
       
       // Fallback responses based on message content
       const lowerMessage = message.toLowerCase();

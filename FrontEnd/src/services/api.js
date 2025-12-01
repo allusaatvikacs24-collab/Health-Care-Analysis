@@ -292,25 +292,45 @@ export const api = {
   },
 
   async chatWithAI(prompt) {
-    await delay(500);
+    console.log('API chatWithAI called with prompt:', prompt);
+    await delay(300);
+    
+    const healthContext = {
+      avgSteps: currentData.metrics?.avgSteps || 8420,
+      avgHeartRate: currentData.metrics?.avgHeartRate || 72,
+      avgSleep: currentData.metrics?.avgSleep || 7.2,
+      totalUsers: currentData.metrics?.totalPatients || 1
+    };
+    
+    console.log('Health context for AI:', healthContext);
+    
     try {
-      const healthContext = {
-        avgSteps: currentData.metrics?.avgSteps || 0,
-        avgHeartRate: currentData.metrics?.avgHeartRate || 0,
-        avgSleep: currentData.metrics?.avgSleep || 0,
-        totalUsers: currentData.metrics?.totalPatients || 0
-      };
-      
-      return await geminiService.chatWithAI(prompt, healthContext);
+      const aiResponse = await geminiService.chatWithAI(prompt, healthContext);
+      console.log('Gemini AI response:', aiResponse);
+      return aiResponse;
     } catch (error) {
-      console.error('AI chat error:', error);
+      console.error('Gemini AI chat error:', error);
+      
+      // Enhanced fallback responses
       const lowerPrompt = prompt.toLowerCase();
       
-      if (lowerPrompt.includes('sleep')) return mockChatResponses.sleep;
-      if (lowerPrompt.includes('stress')) return mockChatResponses.stress;
-      if (lowerPrompt.includes('habit')) return mockChatResponses.habits;
+      if (lowerPrompt.includes('fever')) {
+        return 'For fever, rest and stay hydrated. Monitor your temperature and consult a healthcare provider if it persists above 101°F (38.3°C) or if you experience severe symptoms. Take acetaminophen or ibuprofen as directed for comfort.';
+      }
       
-      return mockChatResponses.default;
+      if (lowerPrompt.includes('sleep')) {
+        return `Based on your ${healthContext.avgSleep} hours of sleep, maintain a consistent sleep schedule. Aim for 7-9 hours nightly with a cool, dark room and avoid screens before bed.`;
+      }
+      
+      if (lowerPrompt.includes('stress')) {
+        return 'Try deep breathing exercises, regular physical activity, and mindfulness practices. Even 5-10 minutes of meditation daily can significantly reduce stress levels.';
+      }
+      
+      if (lowerPrompt.includes('habit')) {
+        return `Focus on: 1) Consistent sleep schedule, 2) Increase daily steps from ${healthContext.avgSteps} to 10,000+, 3) Stay hydrated, 4) Regular meals. Small changes make big differences!`;
+      }
+      
+      return 'I\'m here to help with your health questions! I can provide advice on sleep, exercise, nutrition, stress management, and general wellness. What specific area would you like guidance on?';
     }
   },
 
