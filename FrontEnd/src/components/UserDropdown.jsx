@@ -81,10 +81,18 @@ export default function UserDropdown() {
           <div className="pt-3 border-t dark:border-slate-700 border-slate-200">
             <button 
               onClick={() => {
-                // Clear all stored data
-                localStorage.clear();
-                // Reload the page to reset the application
-                window.location.reload();
+                if (confirm('Are you sure you want to sign out? This will clear all your data.')) {
+                  console.log('Signing out user...');
+                  // Clear all stored data
+                  localStorage.clear();
+                  sessionStorage.clear();
+                  // Close dropdown first
+                  setShowUserInfo(false);
+                  // Small delay then reload
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 100);
+                }
               }}
               className="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors"
             >
